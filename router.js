@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const MenuItem = require('./menuItem'); // Import MenuItem schema
+const MenuItem = require('./menuItem'); 
 
-// POST /menu - Create a new menu item
 router.post('/menu', async (req, res) => {
   try {
     const { name, description, price } = req.body;
@@ -19,7 +18,6 @@ router.post('/menu', async (req, res) => {
   }
 });
 
-// GET /menu - Fetch all menu items
 router.get('/menu', async (req, res) => {
   try {
     const menuItems = await MenuItem.find();
@@ -29,14 +27,13 @@ router.get('/menu', async (req, res) => {
   }
 });
 
-// PUT /menu/:id - Update an existing menu item
 router.put('/menu/:id', async (req, res) => {
   try {
     const { name, description, price } = req.body;
     const updatedItem = await MenuItem.findByIdAndUpdate(
       req.params.id,
       { name, description, price },
-      { new: true, runValidators: true } // Return updated document and validate input
+      { new: true, runValidators: true } 
     );
 
     if (!updatedItem) {
@@ -49,7 +46,7 @@ router.put('/menu/:id', async (req, res) => {
   }
 });
 
-// DELETE /menu/:id - Delete an existing menu item
+
 router.delete('/menu/:id', async (req, res) => {
   try {
     const deletedItem = await MenuItem.findByIdAndDelete(req.params.id);
