@@ -1,15 +1,27 @@
+require('dotenv').config(); // Load environment variables from .env
 const express = require('express');
-const { resolve } = require('path');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const router = require('./router'); // Import router
 
 const app = express();
-const port = 3010;
+app.use(bodyParser.json());
 
-app.use(express.static('static'));
-
-app.get('/', (req, res) => {
-  res.sendFile(resolve(__dirname, 'pages/index.html'));
+// Connect to MongoDB Atlas using the connection string from .env
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(() => {
+  console.log('Connected to MongoDB Atlas');
+}).catch(err => {
+  console.error('Error connecting to MongoDB Atlas:', err);
 });
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+// Use the routes defined in router.js
+app.use('/api', router);
+
+// Start the server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
